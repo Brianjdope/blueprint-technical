@@ -1,0 +1,12 @@
+{
+  "name": "infra",
+  "version": "1.0.0",
+  "main": "bin/index.js",
+  "scripts": {
+    "deploy": "npx cdk deploy --app \"node bin/index.js\""
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  }
+}

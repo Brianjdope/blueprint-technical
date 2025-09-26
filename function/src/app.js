@@ -1,24 +1,40 @@
 import { useState } from "react";
 
 function App() {
-  const [name, setName] = useState("");
-  const [result, setResult] = useState("");
+  const [name, setName] = useState<string>("");
+  const [result, setResult] = useState<string>("");
 
   const createRepo = async () => {
-    const res = await fetch(
-      `YOUR_API_URL/create?name=${encodeURIComponent(name)}`,
-      { method: "POST" }
-    );
-    const data = await res.json();
-    setResult(JSON.stringify(data, null, 2));
+    try {
+      const res = await fetch(
+  `https://abc123.execute-api.us-east-1.amazonaws.com/prod/create?name=${encodeURIComponent(name)}`,
+  { method: "POST" }
+);
+
+      const data = await res.json();
+      setResult(JSON.stringify(data, null, 2));
+    } catch (err: any) {
+      setResult(`Error: ${err.message}`);
+    }
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Repo Creator</h1>
-      <input value={name} onChange={e => setName(e.target.value)} />
-      <button onClick={createRepo}>Create Repo</button>
-      <pre>{result}</pre>
+    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+      <h1>GitHub Repo Creator</h1>
+      <p>Enter a repository name and click the button to create it:</p>
+      <input
+        type="text"
+        value={name}
+        placeholder="my-new-repo"
+        onChange={(e) => setName(e.target.value)}
+        style={{ marginRight: "1rem", padding: "0.5rem" }}
+      />
+      <button onClick={createRepo} style={{ padding: "0.5rem 1rem" }}>
+        Create Repo
+      </button>
+      <pre style={{ marginTop: "2rem", background: "#eee", padding: "1rem" }}>
+        {result}
+      </pre>
     </div>
   );
 }
