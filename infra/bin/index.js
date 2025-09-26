@@ -1,28 +1,15 @@
-// infra/lib/repo-creator-stack.js
+#!/usr/bin/env node
 const cdk = require('aws-cdk-lib');
-const lambda = require('aws-cdk-lib/aws-lambda');
-const apigateway = require('aws-cdk-lib/aws-apigateway');
-const path = require('path');
+const { RepoCreatorStack } = require('../lib/repo-creator-stack');
 
-class RepoCreatorStack extends cdk.Stack {
-  constructor(scope, id, props) {
-    super(scope, id, props);
+// Create a new CDK app
+const app = new cdk.App();
 
-    const repoFunction = new lambda.Function(this, 'RepoCreatorFunction', {
-      runtime: lambda.Runtime.NODEJS18_X,
-      handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../function')),
-      environment: {
-        GITHUB_TOKEN: process.env.GITHUB_TOKEN,
-        TARGET_ORG: process.env.TARGET_ORG || 'blueprint-org',
-      },
-    });
-
-    new apigateway.LambdaRestApi(this, 'RepoCreatorAPI', {
-      handler: repoFunction,
-      proxy: false,
-    });
-  }
-}
-
-module.exports = { RepoCreatorStack };
+// Instantiate your RepoCreatorStack
+new RepoCreatorStack(app, 'RepoCreatorStack', {
+  // Uncomment and set env if you want to lock deployment region/account
+  // env: { 
+  //   account: process.env.CDK_DEFAULT_ACCOUNT, 
+  //   region: process.env.CDK_DEFAULT_REGION 
+  // },
+});
