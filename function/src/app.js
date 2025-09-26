@@ -1,19 +1,21 @@
 import { useState } from "react";
 
 function App() {
-  const [name, setName] = useState<string>("");
-  const [result, setResult] = useState<string>("");
+  const [name, setName] = useState("");
+  const [result, setResult] = useState("");
 
   const createRepo = async () => {
     try {
       const res = await fetch(
-  `https://abc123.execute-api.us-east-1.amazonaws.com/prod/create?name=${encodeURIComponent(name)}`,
-  { method: "POST" }
-);
+        `https://abc123.execute-api.us-east-1.amazonaws.com/prod/create?name=${encodeURIComponent(
+          name
+        )}`,
+        { method: "POST" }
+      );
 
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
-    } catch (err: any) {
+    } catch (err) {
       setResult(`Error: ${err.message}`);
     }
   };
